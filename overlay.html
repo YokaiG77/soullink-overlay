@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Overlay Soullink</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green: #33ea14;
+  --green-dim: rgba(51,234,20,.45);
+  --purple: #aa00f8;
+  --bg: #0a0a0a;
+  --card: #121212;
+  --text: #f2f2f2;
+  --muted: #8a8a8a;
+  --dead: #3a3a3a;
+  --title: "Ethnocentric Rg","Ethnocentric","Orbitron",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:transparent;font-family:"Rajdhani",sans-serif;font-weight:600;color:var(--text)}
+.zone{position:absolute}
+.dots{background-color:var(--bg);background-image:radial-gradient(rgba(255,255,255,.07) 1.2px,transparent 1.4px);background-size:12px 12px}
+.frame{border:2px solid var(--green-dim)}
+.frame::before,.frame::after,.panel::before,.panel::after{content:"";position:absolute;width:30px;height:30px;pointer-events:none}
+.frame::before,.frame::after,.panel::before,.panel::after{animation:cornerPulse 3.2s ease-in-out infinite}
+.frame::after,.panel::after{animation-delay:-1.6s}
+@keyframes cornerPulse{0%,100%{filter:none}50%{filter:drop-shadow(0 0 7px var(--green)) brightness(1.25)}}
+.dots{animation:dotsDrift 40s linear infinite}
+@keyframes dotsDrift{to{background-position:120px 60px}}
+html[data-motion=low] *,html[data-motion=low] *::before,html[data-motion=low] *::after{animation:none!important}
+.frame::before,.panel::before{left:-2px;top:-2px;background:linear-gradient(135deg,var(--green) 0 50%,transparent 50%)}
+.frame::after,.panel::after{right:-2px;bottom:-2px;background:linear-gradient(315deg,var(--green) 0 50%,transparent 50%)}
+.tag{position:absolute;left:14px;bottom:10px;background:#0b0b0b;padding:4px 26px 4px 14px;clip-path:polygon(0 0,100% 0,calc(100% - 16px) 100%,0 100%);border-left:4px solid var(--green);font-family:var(--title);font-size:22px;text-transform:uppercase;letter-spacing:1px;color:#0b0b0b;-webkit-text-stroke:1.5px var(--green);display:flex;align-items:center;gap:8px}
+.tag{--c:var(--green)}
+.tag.p{--c:var(--purple)}
+.tag{border-left-color:var(--c);-webkit-text-stroke-color:var(--c)}
+.tag small{font-family:"Rajdhani",sans-serif;-webkit-text-stroke:0;color:var(--muted);font-size:17px;text-transform:none;letter-spacing:0}
+input{font:inherit;color:inherit;background:transparent;border:none;outline:none;border-bottom:2px solid transparent;min-width:0}
+input:focus{border-bottom-color:var(--green)}
+input::placeholder{color:var(--dead);-webkit-text-stroke:0}
+.tag input{width:9.5em;font-family:inherit;text-transform:uppercase;-webkit-text-stroke:inherit;color:#0b0b0b}
+#sync{font-family:"Orbitron",sans-serif;font-size:11px;letter-spacing:2px;color:var(--dead);-webkit-text-stroke:0;margin-left:10px}
+#sync.on{color:var(--green)}
+#save{font-family:"Orbitron",sans-serif;font-size:11px;letter-spacing:2px;color:var(--dead);-webkit-text-stroke:0;margin-left:10px}
+#save.on{color:var(--green)}
+button{font-family:"Orbitron",sans-serif;font-weight:700;color:var(--muted);background:#0b0b0b;border:1px solid var(--dead);cursor:pointer;line-height:1}
+button:hover{color:var(--green);border-color:var(--green)}
+#bar{left:0;top:960px;width:1280px;height:120px;border-top:2px solid var(--green);display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:12px 14px}
+.pair{position:relative;background:var(--card);clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);padding:8px 10px 8px 30px;display:flex;flex-direction:column;justify-content:center;gap:2px;border-left:3px solid var(--dead)}
+.pair.on{border-left-color:var(--green)}
+.pair.fused{animation:fusedGlow 2.4s ease-in-out infinite;border-left-color:var(--purple);background:linear-gradient(90deg,rgba(170,0,248,.18),var(--card) 70%)}
+.pair .heart{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--dead)}
+.pair.on .heart{color:var(--green)}
+.pair.fused .heart{color:var(--purple)}
+.pair input{font-size:21px;width:100%}
+.pair input.p1{padding-right:50px;color:var(--text)}
+.pair input.p2{color:#c58cff}
+.pair input.auto{pointer-events:none}
+.pair .hp{position:absolute;left:30px;right:10px;height:2px;background:#1e1e1e}
+.pair .hp i{display:block;height:100%;background:var(--green);transition:width .4s}
+.pair .hp.h1{top:40px}.pair .hp.h2{bottom:8px}
+.pair .hp i.mid{background:#ffc21a}.pair .hp i.low{background:#ff3b3b}
+.pair input.ko{color:#ff5a5a!important;text-decoration:line-through}
+.pair .ctl{position:absolute;right:6px;top:6px;display:flex;gap:3px}
+.pair .ctl button{font-size:11px;padding:3px 5px}
+.pair.fused .ctl .f{color:var(--purple);border-color:var(--purple)}
+#grave{left:1280px;top:660px;width:640px;height:420px;border:2px solid var(--green-dim);padding:18px 22px;display:flex;flex-direction:column;gap:10px}
+#grave h2{font-family:var(--title);font-weight:400;font-size:30px;letter-spacing:2px;text-transform:uppercase;color:#0b0b0b;-webkit-text-stroke:1.5px var(--green);display:flex;justify-content:space-between;align-items:baseline}
+#grave h2 span{font-family:"Orbitron",sans-serif;font-size:14px;-webkit-text-stroke:0;color:var(--green);letter-spacing:3px}
+.stats{display:flex;gap:22px;font-size:22px;align-items:center}
+.stats b{font-family:"Orbitron",sans-serif;color:var(--green);font-weight:700}
+.stats button{font-size:13px;padding:2px 7px}
+.route{font-size:20px;color:var(--muted);display:flex;gap:8px;border-bottom:1px solid #1e1e1e;padding-bottom:8px}
+.route input{flex:1;color:var(--text)}
+#list{list-style:none;display:flex;flex-direction:column;gap:6px;overflow:hidden;flex:1}
+#list li{display:flex;justify-content:space-between;font-size:20px;background:var(--card);border-left:3px solid var(--dead);padding:4px 12px;cursor:pointer;color:#bdbdbd;text-decoration:line-through;text-decoration-color:rgba(255,255,255,.25)}
+@keyframes fusedGlow{0%,100%{box-shadow:inset 0 0 0 transparent}50%{box-shadow:inset 0 0 18px rgba(170,0,248,.35)}}
+#list li:first-child.fresh{animation:deadIn .9s cubic-bezier(.2,.9,.25,1.1) both}
+@keyframes deadIn{0%{transform:translateX(-110%);background:#3a0d0d}60%{background:#3a0d0d}100%{transform:none}}
+#list li span:last-child{color:var(--muted);text-decoration:none;font-size:17px}
+#list li:hover{border-left-color:var(--green)}
+#list li.empty{color:var(--dead);background:none;border:none;text-decoration:none;cursor:default}
+</style>
+</head>
+<body>
+<div class="zone frame" style="left:0;top:0;width:1280px;height:960px"></div>
+<div class="zone frame" style="left:1280px;top:0;width:640px;height:480px">
+  <div class="tag p"><small>Jeu de</small><input class="nm" data-who="other" placeholder="Partenaire"></div>
+</div>
+<div class="zone frame" style="left:1280px;top:480px;width:320px;height:180px"><div class="tag"><input class="nm" data-who="me" placeholder="Toi"></div></div>
+<div class="zone frame" style="left:1600px;top:480px;width:320px;height:180px"><div class="tag p"><input class="nm" data-who="other" placeholder="Partenaire"></div></div>
+
+<div class="zone dots" id="bar"></div>
+
+<div class="zone dots panel" id="grave">
+  <h2>Cimetière <span>SOULLINK<i id="save">ÉQUIPE MANUELLE</i><i id="sync">HORS LIGNE</i></span></h2>
+  <div class="stats">
+    <span>Morts <b id="nDead">0</b></span>
+    <span>Badges <b id="nBadges">0</b><b style="color:var(--muted)">/8</b> <button data-b="-1">-</button> <button data-b="1">+</button></span>
+  </div>
+  <div class="route">Route <input id="route" placeholder="Route 1"></div>
+  <ul id="list"></ul>
+</div>
+
+<script>
+/* =====================================================================
+   Tracker soullink partagé entre deux OBS.
+   - ME : "a" pour Allan, "b" pour le partenaire (ou ?me=a / ?me=b dans l'URL)
+   - ROOM : identifiant secret commun aux deux fichiers
+   Synchronisation via ntfy.sh (gratuit, sans compte). Chaque OBS garde aussi
+   une copie locale : si la connexion tombe, le tracker continue de marcher
+   et se resynchronise tout seul au retour.
+   ===================================================================== */
+var Q = new URLSearchParams(location.search);
+var ME = Q.get("me") === "b" ? "b" : "a";
+var ROOM = Q.get("room") || "demo";
+var OTHER = ME === "a" ? "b" : "a";
+var SRV = Q.get("srv") || "https://ntfy.sh";
+var TOPIC = SRV + "/soullink-" + ROOM;
+var KEY = "soullink-shared-" + ROOM;
+var CID = Math.random().toString(36).slice(2, 10);
+
+var data = { nameA: "", nameB: "", route: "", badges: 0, pairs: [], dead: [] }, ts = {};
+for (var i = 0; i < 6; i++) data.pairs.push({ a: "", b: "", f: false });
+try {
+  var raw = JSON.parse(localStorage.getItem(KEY) || "null");
+  if (raw) { data = raw.data; ts = raw.ts || {}; }
+  else if (ME === "a") {                       // reprise de l'ancien tracker (non partagé)
+    var old = JSON.parse(localStorage.getItem("soullink-if-v1") || "null");
+    if (old) {
+      var now0 = Date.now() - 60000;
+      data.route = old.route || ""; data.badges = old.badges || 0; data.dead = old.dead || [];
+      (old.pairs || []).forEach(function (q, i) { if (i < 6) data.pairs[i] = { a: q.a || "", b: q.b || "", f: !!q.f }; });
+      ["route", "badges", "dead"].forEach(function (p) { ts[p] = now0; });
+      for (var j = 0; j < 6; j++) ["a", "b", "f"].forEach(function (f) { ts["pairs." + j + "." + f] = now0; });
+    }
+  }
+} catch (e) {}
+function save() { try { localStorage.setItem(KEY, JSON.stringify({ data: data, ts: ts })); } catch (e) {} }
+
+function getP(path) { return path.split(".").reduce(function (o, k) { return o == null ? undefined : o[k]; }, data); }
+function setP(path, v) {
+  var ks = path.split("."), o = data;
+  for (var j = 0; j < ks.length - 1; j++) o = o[ks[j]];
+  o[ks[ks.length - 1]] = v;
+}
+
+/* ---------- Envoi ---------- */
+var online = false, timers = {};
+function publish(msg) {
+  msg.c = CID;
+  fetch(TOPIC, { method: "POST", body: JSON.stringify(msg) }).catch(function () {});
+}
+function change(path, value, debounce) {
+  setP(path, value); ts[path] = Date.now(); save();
+  clearTimeout(timers[path]);
+  var send = function () { publish({ k: "set", p: path, v: getP(path), t: ts[path] }); };
+  if (debounce) timers[path] = setTimeout(send, 700); else send();
+}
+function snapshot() { publish({ k: "snap", d: data, ts: ts }); }
+
+/* ---------- Réception ---------- */
+function receive(m) {
+  if (!m || !m.k) return;
+  var changed = false;
+  if (m.k === "set" && m.t > (ts[m.p] || 0)) { setP(m.p, m.v); ts[m.p] = m.t; changed = true; }
+  if (m.k === "snap" && m.ts) {
+    Object.keys(m.ts).forEach(function (p) {
+      if (m.ts[p] > (ts[p] || 0)) {
+        var v = p.split(".").reduce(function (o, k) { return o == null ? undefined : o[k]; }, m.d);
+        if (v !== undefined) { setP(p, v); ts[p] = m.ts[p]; changed = true; }
+      }
+    });
+  }
+  if (changed) { save(); render(); }
+}
+function parseLine(line) {
+  try { var ev = JSON.parse(line); if (ev.event === "message" && ev.message) receive(JSON.parse(ev.message)); } catch (e) {}
+}
+function setOnline(v) {
+  online = v;
+  var s = document.getElementById("sync");
+  s.textContent = v ? "SYNCHRO" : "HORS LIGNE"; s.classList.toggle("on", v);
+}
+function connect() {
+  fetch(TOPIC + "/json?poll=1&since=12h").then(function (r) { return r.text(); }).then(function (txt) {
+    txt.split("\n").forEach(parseLine);
+    snapshot();                                   // partage ce qu'on a de plus récent
+    var es = new EventSource(TOPIC + "/sse");
+    es.onopen = function () { setOnline(true); };
+    es.onmessage = function (e) { parseLine(e.data); };
+    es.onerror = function () { setOnline(false); };
+  }).catch(function () { setOnline(false); setTimeout(connect, 10000); });
+}
+setInterval(function () { if (online) snapshot(); }, 10 * 60 * 1000);
+
+/* ---------- Affichage ---------- */
+var bar = document.getElementById("bar"), cards = [];
+for (var k = 0; k < 6; k++) (function (i) {
+  var d = document.createElement("div");
+  d.className = "pair";
+  d.innerHTML = '<span class="heart">&#9829;</span>' +
+    '<div class="ctl"><button class="f" title="Fusion">F</button><button class="k" title="Mort de la paire">&#10013;</button></div>' +
+    '<input class="p1" placeholder="Le tien"><input class="p2" placeholder="Le sien">' +
+    '<div class="hp h1"><i></i></div><div class="hp h2"><i></i></div>';
+  var mine = d.querySelector(".p1"), theirs = d.querySelector(".p2");
+  mine.oninput = function () { change("pairs." + i + "." + ME, mine.value, true); paint(i); };
+  theirs.oninput = function () { change("pairs." + i + "." + OTHER, theirs.value, true); paint(i); };
+  d.querySelector(".f").onclick = function () { change("pairs." + i + ".f", !data.pairs[i].f); render(); };
+  d.querySelector(".k").onclick = function () {
+    var nm = mine.value, nt = theirs.value; if (!nm && !nt) return;
+    var entry = ME === "a" ? { a: nm || "?", b: nt || "?" } : { a: nt || "?", b: nm || "?" };
+    entry.r = data.route || "";
+    var dead = [entry].concat(data.dead).slice(0, 40);
+    change("dead", dead);
+    change("pairs." + i + ".a", ""); change("pairs." + i + ".b", ""); change("pairs." + i + ".f", false);
+    render();
+  };
+  bar.appendChild(d);
+  cards.push({ el: d, mine: mine, theirs: theirs, hp1: d.querySelector('.h1 i'), hp2: d.querySelector('.h2 i') });
+})(k);
+
+function setVal(input, v) { if (document.activeElement !== input && input.value !== v) input.value = v; }
+function showSlot(input, hp, party, i, manual) {
+  var auto = Array.isArray(party), mon = auto ? party[i] : null;
+  input.classList.toggle("auto", auto);
+  input.readOnly = auto;
+  hp.parentNode.style.display = mon ? "" : "none";
+  if (!auto) { input.classList.remove("ko"); setVal(input, manual); return; }
+  input.value = mon ? mon.n : "";
+  input.classList.toggle("ko", !!mon && mon.hp === 0);
+  if (mon) {
+    var r = mon.thp ? mon.hp / mon.thp : 0;
+    hp.style.width = Math.round(r * 100) + "%";
+    hp.className = r > .5 ? "" : r > .2 ? "mid" : "low";
+  }
+}
+function paint(i) {
+  var p = data.pairs[i], c = cards[i];
+  c.el.classList.toggle("on", !!(p.a || p.b || c.mine.value || c.theirs.value));
+  c.el.classList.toggle("fused", !!p.f);
+}
+var lastDead = null;
+function render() {
+  var pm = data.party && data.party[ME], po = data.party && data.party[OTHER];
+  var sv = document.getElementById("save"); sv.textContent = Array.isArray(pm) ? "ÉQUIPE AUTO" : "ÉQUIPE MANUELLE"; sv.classList.toggle("on", Array.isArray(pm));
+  cards.forEach(function (c, i) {
+    var p = data.pairs[i];
+    showSlot(c.mine, c.hp1, pm, i, p[ME] || "");
+    showSlot(c.theirs, c.hp2, po, i, p[OTHER] || "");
+    paint(i);
+  });
+  document.querySelectorAll(".nm").forEach(function (n) {
+    var key = n.dataset.who === "me" ? (ME === "a" ? "nameA" : "nameB") : (ME === "a" ? "nameB" : "nameA");
+    setVal(n, data[key] || "");
+  });
+  setVal(document.getElementById("route"), data.route || "");
+  document.getElementById("nBadges").textContent = data.badges;
+  var fresh = lastDead !== null && data.dead.length > lastDead; lastDead = data.dead.length;
+  document.getElementById("nDead").textContent = data.dead.length;
+  var ul = document.getElementById("list"); ul.innerHTML = "";
+  if (!data.dead.length) { ul.innerHTML = '<li class="empty">Aucune perte pour l\'instant</li>'; return; }
+  data.dead.slice(0, 7).forEach(function (x, i) {
+    var li = document.createElement("li");
+    li.title = "Double-clic pour annuler";
+    li.innerHTML = "<span></span><span></span>";
+    var mineN = ME === "a" ? x.a : x.b, theirN = ME === "a" ? x.b : x.a;
+    li.firstChild.textContent = mineN + "  &  " + theirN;
+    li.lastChild.textContent = x.r;
+    li.ondblclick = function () { change("dead", data.dead.filter(function (_, j) { return j !== i; })); render(); };
+    if (fresh && i === 0) li.classList.add("fresh");
+    ul.appendChild(li);
+  });
+}
+document.querySelectorAll(".nm").forEach(function (n) {
+  n.oninput = function () {
+    var key = n.dataset.who === "me" ? (ME === "a" ? "nameA" : "nameB") : (ME === "a" ? "nameB" : "nameA");
+    change(key, n.value, true);
+    document.querySelectorAll(".nm").forEach(function (o) { if (o !== n && o.dataset.who === n.dataset.who) o.value = n.value; });
+  };
+});
+var route = document.getElementById("route");
+route.oninput = function () { change("route", route.value, true); };
+document.querySelectorAll("[data-b]").forEach(function (btn) {
+  btn.onclick = function () { change("badges", Math.max(0, Math.min(8, data.badges + Number(btn.dataset.b)))); render(); };
+});
+if (!data.party) data.party = {};
+
+render(); connect();
+</script>
+</body>
+</html>

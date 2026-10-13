@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soullink Overlay</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--green:#33ea14;--purple:#aa00f8;--bg:#0a0a0a;--card:#121212;--line:#222;--text:#f2f2f2;--muted:#8a8a8a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:var(--bg) radial-gradient(rgba(255,255,255,.06) 1.2px,transparent 1.5px) 0 0/12px 12px;color:var(--text);font-family:"Rajdhani",sans-serif;font-weight:600;font-size:18px;padding:32px 16px}
+main{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1{font-family:"Orbitron",sans-serif;font-weight:900;font-size:28px;letter-spacing:.12em;color:var(--green);text-transform:uppercase}
+h2{font-family:"Orbitron",sans-serif;font-size:14px;letter-spacing:.3em;color:var(--green);text-transform:uppercase;margin-bottom:10px}
+.kicker{font-family:"Orbitron",sans-serif;font-size:12px;letter-spacing:.35em;color:var(--muted);text-transform:uppercase}
+.card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--green);padding:18px 20px;clip-path:polygon(0 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%)}
+.card.p{border-left-color:var(--purple)}
+p{color:#cfcfcf;line-height:1.45}
+.seg{display:flex;gap:8px;margin:10px 0}
+.seg button{flex:1;font-family:"Orbitron",sans-serif;font-weight:700;font-size:13px;letter-spacing:.1em;padding:12px;background:#0d0d0d;color:var(--muted);border:1px solid var(--line);cursor:pointer}
+.seg button.on{color:var(--bg);background:var(--green);border-color:var(--green)}
+.link{display:flex;gap:8px;align-items:stretch;margin-top:8px}
+.link input{flex:1;min-width:0;background:#000;border:1px solid var(--line);color:var(--green);font:inherit;font-size:14px;padding:10px}
+.link button,.link a{font-family:"Orbitron",sans-serif;font-weight:700;font-size:12px;letter-spacing:.1em;padding:0 14px;display:flex;align-items:center;background:var(--green);color:var(--bg);border:0;cursor:pointer;text-decoration:none}
+ol{padding-left:22px;color:#cfcfcf;line-height:1.6}
+code{background:#000;padding:2px 6px;color:var(--green)}
+</style>
+</head>
+<body>
+<main>
+  <div>
+    <div class="kicker">Pokémon Infinite Fusion</div>
+    <h1>Soullink Overlay</h1>
+  </div>
+
+  <div class="card">
+    <h2>Qui es-tu ?</h2>
+    <div class="seg"><button data-me="a">Joueur 1 (Allan)</button><button data-me="b">Joueur 2 (partenaire)</button></div>
+    <p>Partie : <code id="room"></code></p>
+  </div>
+
+  <div class="card">
+    <h2>1. Le relais (Chrome ou Edge)</h2>
+    <p>À ouvrir dans Chrome avant chaque live. Il lit ta sauvegarde et envoie ton équipe à l'overlay.</p>
+    <div class="link"><input id="relais" readonly><a id="openRelais" target="_blank">Ouvrir</a></div>
+  </div>
+
+  <div class="card">
+    <h2>2. L'overlay (OBS)</h2>
+    <p>Dans OBS : source <b>Navigateur</b>, décoche "Fichier local", colle ce lien, largeur 1920, hauteur 1080.</p>
+    <div class="link"><input id="overlay" readonly><button data-copy="overlay">Copier</button></div>
+    <ol style="margin-top:12px">
+      <li>Ton jeu : x 0, y 0, 1280x960 (mise à l'échelle : Point)</li>
+      <li>Jeu de l'autre : x 1280, y 0, 640x480</li>
+      <li>Ta cam : x 1280, y 480, 320x180 | sa cam : x 1600, y 480, 320x180</li>
+      <li>Pour taper la route, les morts, les pseudos : clic droit sur la source, <b>Interagir</b></li>
+    </ol>
+  </div>
+
+  <div class="card p">
+    <h2>Partager avec ton partenaire</h2>
+    <p>Envoie-lui ce lien : il tombera sur cette page, dans la même partie.</p>
+    <div class="link"><input id="share" readonly><button data-copy="share">Copier</button></div>
+  </div>
+</main>
+<script>
+var Q = new URLSearchParams(location.search);
+var ROOM = Q.get("room");
+if (!ROOM) { ROOM = Math.random().toString(16).slice(2, 14); history.replaceState(null, "", "?room=" + ROOM); }
+var ME = Q.get("me") === "b" ? "b" : "a";
+var base = location.href.split("?")[0].replace(/index\.html$/, "");
+function refresh() {
+  document.getElementById("room").textContent = ROOM;
+  var q = "?me=" + ME + "&room=" + ROOM;
+  document.getElementById("relais").value = base + "relais.html" + q;
+  document.getElementById("openRelais").href = base + "relais.html" + q;
+  document.getElementById("overlay").value = base + "overlay.html" + q;
+  document.getElementById("share").value = base + "?room=" + ROOM + "&me=" + (ME === "a" ? "b" : "a");
+  document.querySelectorAll("[data-me]").forEach(function (b) { b.classList.toggle("on", b.dataset.me === ME); });
+  history.replaceState(null, "", "?room=" + ROOM + "&me=" + ME);
+}
+document.querySelectorAll("[data-me]").forEach(function (b) { b.onclick = function () { ME = b.dataset.me; refresh(); }; });
+document.querySelectorAll("[data-copy]").forEach(function (b) {
+  b.onclick = function () {
+    var i = document.getElementById(b.dataset.copy); i.select();
+    (navigator.clipboard ? navigator.clipboard.writeText(i.value) : Promise.reject()).catch(function () { document.execCommand("copy"); });
+    b.textContent = "Copié"; setTimeout(function () { b.textContent = "Copier"; }, 1500);
+  };
+});
+refresh();
+</script>
+</body>
+</html>
