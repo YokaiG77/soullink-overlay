@@ -19,28 +19,28 @@ html:not([data-theme="neon"]) .pair{clip-path:none}
 
 /* =============================== PASTEL =============================== */
 html[data-theme="pastel"]{
-  --green:#ff7aa8; --purple:#8f7cff; --bg:#fff4f8; --card:#ffffff;
-  --text:#4b3a55; --muted:#a08fb0; --dead:#e3d6e8; --green-dim:rgba(255,122,168,.55);
+  --green:#d6336f; --purple:#5b3fd6; --bg:#eab3cc; --card:#fff1f7;
+  --text:#341d3d; --muted:#8b6593; --dead:#dc9dbb; --green-dim:rgba(214,51,111,.5);
   --title:"Fredoka",sans-serif;
 }
 html[data-theme="pastel"] body{font-family:"Fredoka",sans-serif;font-weight:500}
-html[data-theme="pastel"] .dots{background-color:var(--bg);background-image:radial-gradient(rgba(255,122,168,.18) 1.6px,transparent 1.9px);background-size:16px 16px}
-html[data-theme="pastel"] .frame{border:4px solid #fff;border-radius:22px;box-shadow:0 0 0 3px var(--green-dim),0 8px 24px rgba(120,60,110,.18)}
-html[data-theme="pastel"] .tag{background:#fff;border-left:0;border-radius:999px;padding:4px 18px;font-weight:600;font-size:22px;letter-spacing:.5px;text-transform:none;box-shadow:0 4px 12px rgba(120,60,110,.18)}
+html[data-theme="pastel"] .dots{background:var(--bg);animation:none}
+html[data-theme="pastel"] .frame{border:4px solid #fff1f7;border-radius:22px;box-shadow:0 0 0 3px var(--green-dim),0 8px 24px rgba(120,60,110,.18)}
+html[data-theme="pastel"] .tag{background:#fff1f7;border-left:0;border-radius:999px;padding:4px 18px;font-weight:600;font-size:22px;letter-spacing:.5px;text-transform:none;box-shadow:0 4px 12px rgba(120,60,110,.18)}
 html[data-theme="pastel"] .tag input{text-transform:none;font-weight:600}
 html[data-theme="pastel"] .tag small{font-family:"Fredoka",sans-serif;color:var(--muted)}
 html[data-theme="pastel"] #bar{border-top:0;border-radius:22px 22px 0 0;background:var(--bg)}
 html[data-theme="pastel"] .pair{border-radius:16px;border-left:0;box-shadow:inset 0 0 0 2px var(--dead)}
 html[data-theme="pastel"] .pair.on{box-shadow:inset 0 0 0 2px var(--green)}
-html[data-theme="pastel"] .pair.fused{box-shadow:inset 0 0 0 2px var(--purple);background:linear-gradient(90deg,rgba(143,124,255,.15),#fff 70%)}
+html[data-theme="pastel"] .pair.fused{box-shadow:inset 0 0 0 2px var(--purple);background:linear-gradient(90deg,rgba(91,63,214,.15),#fff1f7 70%)}
 html[data-theme="pastel"] .pair input.p2{color:var(--purple)}
-html[data-theme="pastel"] .pair .hp{background:#f2e8f2;border-radius:4px;overflow:hidden}
-html[data-theme="pastel"] #grave{border:4px solid #fff;border-radius:22px 0 0 0;box-shadow:0 0 0 3px var(--green-dim)}
+html[data-theme="pastel"] .pair .hp{background:#e7c3d6;border-radius:4px;overflow:hidden}
+html[data-theme="pastel"] #grave{border:4px solid #fff1f7;border-radius:22px 0 0 0;box-shadow:0 0 0 3px var(--green-dim)}
 html[data-theme="pastel"] #grave h2{font-weight:600;letter-spacing:0;text-transform:none}
 html[data-theme="pastel"] #grave h2 span,html[data-theme="pastel"] #sync,html[data-theme="pastel"] #save,
 html[data-theme="pastel"] .stats b{font-family:"Fredoka",sans-serif;letter-spacing:1px}
-html[data-theme="pastel"] #list li{border-radius:10px;border-left:0;background:#fff;box-shadow:inset 0 0 0 2px var(--dead);color:var(--muted)}
-html[data-theme="pastel"] button{font-family:"Fredoka",sans-serif;border-radius:8px;background:#fff;border-color:var(--dead)}
+html[data-theme="pastel"] #list li{border-radius:10px;border-left:0;background:#fff1f7;box-shadow:inset 0 0 0 2px var(--dead);color:var(--muted)}
+html[data-theme="pastel"] button{font-family:"Fredoka",sans-serif;border-radius:8px;background:#fff1f7;border-color:var(--dead)}
 
 /* ======================= RETRO (style menus GBA) ======================= */
 html[data-theme="retro"]{

@@ -64,7 +64,7 @@ code{background:#000;padding:2px 6px;color:var(--green)}
     <p>Choisis le style de ton overlay et de ces pages. Ton partenaire choisit le sien de son côté, sans changer le tien.</p>
     <div class="themes">
       <button class="th" data-th="neon"><div class="sw"><i style="background:#0a0a0a"></i><i style="background:#33ea14"></i><i style="background:#aa00f8"></i></div><b>Néon</b><small>Noir, contours lumineux</small></button>
-      <button class="th" data-th="pastel"><div class="sw"><i style="background:#fff4f8"></i><i style="background:#ff7aa8"></i><i style="background:#8f7cff"></i></div><b>Pastel</b><small>Doux, arrondi, clair</small></button>
+      <button class="th" data-th="pastel"><div class="sw"><i style="background:#eab3cc"></i><i style="background:#d6336f"></i><i style="background:#5b3fd6"></i></div><b>Pastel</b><small>Framboise, arrondi, vagues</small></button>
       <button class="th" data-th="retro"><div class="sw"><i style="background:#28508c"></i><i style="background:#f8d030"></i><i style="background:#f878a8"></i></div><b>Rétro</b><small>Menus façon Game Boy Advance</small></button>
       <button class="th" data-th="minimal"><div class="sw"><i style="background:#0c0e14"></i><i style="background:#7dd3fc"></i><i style="background:#f0abfc"></i></div><b>Minimal</b><small>Sobre, translucide</small></button>
     </div>
@@ -104,7 +104,7 @@ var Q = new URLSearchParams(location.search);
 var ROOM = Q.get("room");
 if (!ROOM) { ROOM = Math.random().toString(16).slice(2, 14); history.replaceState(null, "", "?room=" + ROOM); }
 var ME = Q.get("me") === "b" ? "b" : "a";
-var DEF = { neon: ["33ea14", "aa00f8"], pastel: ["ff7aa8", "8f7cff"], retro: ["f8d030", "f878a8"], minimal: ["7dd3fc", "f0abfc"] };
+var DEF = { neon: ["33ea14", "aa00f8"], pastel: ["d6336f", "5b3fd6"], retro: ["f8d030", "f878a8"], minimal: ["7dd3fc", "f0abfc"] };
 var pref = {}; try { pref = JSON.parse(localStorage.getItem("soullink-theme") || "{}"); } catch (e) {}
 var THEME = Q.get("theme") || pref.theme || "neon"; if (!DEF[THEME]) THEME = "neon";
 var C1 = Q.get("c1") || pref.c1 || "", C2 = Q.get("c2") || pref.c2 || "";
