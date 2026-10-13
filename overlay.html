@@ -3,7 +3,18 @@
 <head>
 <meta charset="utf-8">
 <title>Overlay Soullink</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Fredoka:wght@500;600&family=Pixelify+Sans:wght@500;700&family=Outfit:wght@500;600&display=swap" rel="stylesheet">
+<script>
+/* Thème et couleurs perso, lus dans l'adresse avant l'affichage */
+(function () {
+  var q = new URLSearchParams(location.search), th = q.get("theme") || "neon", d = document.documentElement;
+  if (["neon", "pastel", "retro", "minimal"].indexOf(th) < 0) th = "neon";
+  d.setAttribute("data-theme", th);
+  var hex = /^[0-9a-fA-F]{6}$/, c1 = q.get("c1"), c2 = q.get("c2");
+  if (c1 && hex.test(c1)) d.style.setProperty("--green", "#" + c1);
+  if (c2 && hex.test(c2)) d.style.setProperty("--purple", "#" + c2);
+})();
+</script>
 <style>
 :root{
   --green: #33ea14;
@@ -81,6 +92,7 @@ button:hover{color:var(--green);border-color:var(--green)}
 #list li:hover{border-left-color:var(--green)}
 #list li.empty{color:var(--dead);background:none;border:none;text-decoration:none;cursor:default}
 </style>
+<link rel="stylesheet" href="themes.css">
 </head>
 <body>
 <div class="zone frame" style="left:0;top:0;width:1280px;height:960px"></div>

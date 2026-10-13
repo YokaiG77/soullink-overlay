@@ -1,0 +1,20 @@
+/* Thèmes des pages du site (accueil et relais). Même choix que l'overlay. */
+html[data-theme="pastel"]{--green:#ff7aa8;--purple:#8f7cff;--bg:#fff4f8;--card:#ffffff;--line:#f0dbe6;--text:#4b3a55;--muted:#a08fb0}
+html[data-theme="pastel"] body{font-family:"Fredoka",sans-serif;background-image:radial-gradient(rgba(255,122,168,.18) 1.6px,transparent 1.9px);background-size:16px 16px}
+html[data-theme="pastel"] h1,html[data-theme="pastel"] h2,html[data-theme="pastel"] .kicker,html[data-theme="pastel"] button,html[data-theme="pastel"] #state{font-family:"Fredoka",sans-serif;letter-spacing:.05em}
+html[data-theme="pastel"] .card{clip-path:none;border-radius:18px;border:2px solid var(--line);border-left:6px solid var(--green);box-shadow:0 6px 18px rgba(120,60,110,.12)}
+html[data-theme="pastel"] p,html[data-theme="pastel"] ol{color:var(--text)}
+html[data-theme="pastel"] code,html[data-theme="pastel"] .link input{background:#fff0f6;color:var(--green)}
+
+html[data-theme="retro"]{--green:#f8d030;--purple:#f878a8;--bg:#28508c;--card:#3868b0;--line:#ffffff;--text:#ffffff;--muted:#b8d0f0}
+html[data-theme="retro"] body{font-family:"Pixelify Sans",monospace;background-image:linear-gradient(rgba(255,255,255,.06) 50%,transparent 50%);background-size:100% 6px}
+html[data-theme="retro"] h1,html[data-theme="retro"] h2,html[data-theme="retro"] .kicker,html[data-theme="retro"] button,html[data-theme="retro"] #state{font-family:"Pixelify Sans",monospace}
+html[data-theme="retro"] .card{clip-path:none;border:5px solid #fff;outline:3px solid #183868;border-radius:6px}
+html[data-theme="retro"] p,html[data-theme="retro"] ol{color:#fff}
+html[data-theme="retro"] code,html[data-theme="retro"] .link input{background:#183868;color:var(--green)}
+
+html[data-theme="minimal"]{--green:#7dd3fc;--purple:#f0abfc;--bg:#0c0e14;--card:#151923;--line:#262c3a;--text:#f4f6fb;--muted:#9aa3b5}
+html[data-theme="minimal"] body{font-family:"Outfit",sans-serif;background-image:none}
+html[data-theme="minimal"] h1,html[data-theme="minimal"] h2,html[data-theme="minimal"] .kicker,html[data-theme="minimal"] button,html[data-theme="minimal"] #state{font-family:"Outfit",sans-serif}
+html[data-theme="minimal"] .card{clip-path:none;border-radius:14px;border:1px solid var(--line);border-left:3px solid var(--green)}
+html[data-theme="minimal"] code,html[data-theme="minimal"] .link input{background:#0c0e14}

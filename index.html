@@ -4,7 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Soullink Overlay</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Fredoka:wght@500;600&family=Pixelify+Sans:wght@500;700&family=Outfit:wght@500;600&display=swap" rel="stylesheet">
+<script>
+(function () {
+  var q = new URLSearchParams(location.search), th = q.get("theme") || "neon", d = document.documentElement;
+  if (["neon", "pastel", "retro", "minimal"].indexOf(th) < 0) th = "neon";
+  d.setAttribute("data-theme", th);
+  var hex = /^[0-9a-fA-F]{6}$/, c1 = q.get("c1"), c2 = q.get("c2");
+  if (c1 && hex.test(c1)) d.style.setProperty("--green", "#" + c1);
+  if (c2 && hex.test(c2)) d.style.setProperty("--purple", "#" + c2);
+})();
+</script>
 <style>
 :root{--green:#33ea14;--purple:#aa00f8;--bg:#0a0a0a;--card:#121212;--line:#222;--text:#f2f2f2;--muted:#8a8a8a}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -17,14 +27,24 @@ h2{font-family:"Orbitron",sans-serif;font-size:14px;letter-spacing:.3em;color:va
 .card.p{border-left-color:var(--purple)}
 p{color:#cfcfcf;line-height:1.45}
 .seg{display:flex;gap:8px;margin:10px 0}
-.seg button{flex:1;font-family:"Orbitron",sans-serif;font-weight:700;font-size:13px;letter-spacing:.1em;padding:12px;background:#0d0d0d;color:var(--muted);border:1px solid var(--line);cursor:pointer}
+.seg button{flex:1;font-family:inherit;font-weight:700;font-size:14px;letter-spacing:.1em;padding:12px;background:var(--bg);color:var(--muted);border:1px solid var(--line);cursor:pointer}
 .seg button.on{color:var(--bg);background:var(--green);border-color:var(--green)}
 .link{display:flex;gap:8px;align-items:stretch;margin-top:8px}
 .link input{flex:1;min-width:0;background:#000;border:1px solid var(--line);color:var(--green);font:inherit;font-size:14px;padding:10px}
 .link button,.link a{font-family:"Orbitron",sans-serif;font-weight:700;font-size:12px;letter-spacing:.1em;padding:0 14px;display:flex;align-items:center;background:var(--green);color:var(--bg);border:0;cursor:pointer;text-decoration:none}
 ol{padding-left:22px;color:#cfcfcf;line-height:1.6}
 code{background:#000;padding:2px 6px;color:var(--green)}
+.themes{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.th{cursor:pointer;border:2px solid var(--line);padding:10px;background:var(--bg);text-align:left;font:inherit;color:var(--text);border-radius:6px}
+.th.on{border-color:var(--green)}
+.th .sw{display:flex;gap:4px;margin-bottom:8px}.th .sw i{flex:1;height:26px;border-radius:3px}
+.th b{display:block;font-size:16px;color:var(--text)}.th small{color:var(--muted);font-size:13px}
+.colors{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.colors label{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:15px}
+.colors input{width:44px;height:30px;border:0;background:none;padding:0;cursor:pointer}
+.colors button{font:inherit;font-size:14px;background:none;border:1px solid var(--line);color:var(--muted);padding:4px 10px;cursor:pointer}
 </style>
+<link rel="stylesheet" href="themes-site.css">
 </head>
 <body>
 <main>
@@ -37,6 +57,22 @@ code{background:#000;padding:2px 6px;color:var(--green)}
     <h2>Qui es-tu ?</h2>
     <div class="seg"><button data-me="a">Joueur 1 (Allan)</button><button data-me="b">Joueur 2 (partenaire)</button></div>
     <p>Partie : <code id="room"></code></p>
+  </div>
+
+  <div class="card">
+    <h2>Ton thème</h2>
+    <p>Choisis le style de ton overlay et de ces pages. Ton partenaire choisit le sien de son côté, sans changer le tien.</p>
+    <div class="themes">
+      <button class="th" data-th="neon"><div class="sw"><i style="background:#0a0a0a"></i><i style="background:#33ea14"></i><i style="background:#aa00f8"></i></div><b>Néon</b><small>Noir, contours lumineux</small></button>
+      <button class="th" data-th="pastel"><div class="sw"><i style="background:#fff4f8"></i><i style="background:#ff7aa8"></i><i style="background:#8f7cff"></i></div><b>Pastel</b><small>Doux, arrondi, clair</small></button>
+      <button class="th" data-th="retro"><div class="sw"><i style="background:#28508c"></i><i style="background:#f8d030"></i><i style="background:#f878a8"></i></div><b>Rétro</b><small>Menus façon Game Boy Advance</small></button>
+      <button class="th" data-th="minimal"><div class="sw"><i style="background:#0c0e14"></i><i style="background:#7dd3fc"></i><i style="background:#f0abfc"></i></div><b>Minimal</b><small>Sobre, translucide</small></button>
+    </div>
+    <div class="colors">
+      <label>Ta couleur <input type="color" id="c1"></label>
+      <label>Couleur du partenaire <input type="color" id="c2"></label>
+      <button id="resetColors">Couleurs du thème</button>
+    </div>
   </div>
 
   <div class="card">
@@ -68,17 +104,38 @@ var Q = new URLSearchParams(location.search);
 var ROOM = Q.get("room");
 if (!ROOM) { ROOM = Math.random().toString(16).slice(2, 14); history.replaceState(null, "", "?room=" + ROOM); }
 var ME = Q.get("me") === "b" ? "b" : "a";
+var DEF = { neon: ["33ea14", "aa00f8"], pastel: ["ff7aa8", "8f7cff"], retro: ["f8d030", "f878a8"], minimal: ["7dd3fc", "f0abfc"] };
+var pref = {}; try { pref = JSON.parse(localStorage.getItem("soullink-theme") || "{}"); } catch (e) {}
+var THEME = Q.get("theme") || pref.theme || "neon"; if (!DEF[THEME]) THEME = "neon";
+var C1 = Q.get("c1") || pref.c1 || "", C2 = Q.get("c2") || pref.c2 || "";
 var base = location.href.split("?")[0].replace(/index\.html$/, "");
+function applyTheme() {
+  var d = document.documentElement;
+  d.setAttribute("data-theme", THEME);
+  d.style.removeProperty("--green"); d.style.removeProperty("--purple");
+  if (C1) d.style.setProperty("--green", "#" + C1);
+  if (C2) d.style.setProperty("--purple", "#" + C2);
+  document.getElementById("c1").value = "#" + (C1 || DEF[THEME][0]);
+  document.getElementById("c2").value = "#" + (C2 || DEF[THEME][1]);
+  document.querySelectorAll(".th").forEach(function (b) { b.classList.toggle("on", b.dataset.th === THEME); });
+  try { localStorage.setItem("soullink-theme", JSON.stringify({ theme: THEME, c1: C1, c2: C2 })); } catch (e) {}
+}
 function refresh() {
+  applyTheme();
   document.getElementById("room").textContent = ROOM;
-  var q = "?me=" + ME + "&room=" + ROOM;
+  var look = (THEME !== "neon" ? "&theme=" + THEME : "") + (C1 ? "&c1=" + C1 : "") + (C2 ? "&c2=" + C2 : "");
+  var q = "?me=" + ME + "&room=" + ROOM + look;
   document.getElementById("relais").value = base + "relais.html" + q;
   document.getElementById("openRelais").href = base + "relais.html" + q;
   document.getElementById("overlay").value = base + "overlay.html" + q;
   document.getElementById("share").value = base + "?room=" + ROOM + "&me=" + (ME === "a" ? "b" : "a");
   document.querySelectorAll("[data-me]").forEach(function (b) { b.classList.toggle("on", b.dataset.me === ME); });
-  history.replaceState(null, "", "?room=" + ROOM + "&me=" + ME);
+  history.replaceState(null, "", "?room=" + ROOM + "&me=" + ME + look);
 }
+document.querySelectorAll(".th").forEach(function (b) { b.onclick = function () { THEME = b.dataset.th; C1 = ""; C2 = ""; refresh(); }; });
+document.getElementById("c1").oninput = function (e) { C1 = e.target.value.slice(1); refresh(); };
+document.getElementById("c2").oninput = function (e) { C2 = e.target.value.slice(1); refresh(); };
+document.getElementById("resetColors").onclick = function () { C1 = ""; C2 = ""; refresh(); };
 document.querySelectorAll("[data-me]").forEach(function (b) { b.onclick = function () { ME = b.dataset.me; refresh(); }; });
 document.querySelectorAll("[data-copy]").forEach(function (b) {
   b.onclick = function () {

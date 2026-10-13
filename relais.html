@@ -4,7 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Relais soullink</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Fredoka:wght@500;600&family=Pixelify+Sans:wght@500;700&family=Outfit:wght@500;600&display=swap" rel="stylesheet">
+<script>
+(function () {
+  var q = new URLSearchParams(location.search), th = q.get("theme") || "neon", d = document.documentElement;
+  if (["neon", "pastel", "retro", "minimal"].indexOf(th) < 0) th = "neon";
+  d.setAttribute("data-theme", th);
+  var hex = /^[0-9a-fA-F]{6}$/, c1 = q.get("c1"), c2 = q.get("c2");
+  if (c1 && hex.test(c1)) d.style.setProperty("--green", "#" + c1);
+  if (c2 && hex.test(c2)) d.style.setProperty("--purple", "#" + c2);
+})();
+</script>
 <style>
 :root{--green:#33ea14;--purple:#aa00f8;--bg:#0a0a0a;--card:#121212;--line:#222;--text:#f2f2f2;--muted:#8a8a8a;--red:#ff4d4d}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -28,6 +38,7 @@ li small{color:var(--muted)}
 .hp i.mid{background:#ffc21a}.hp i.low{background:var(--red)}
 code{background:#000;padding:2px 6px;color:var(--green)}
 </style>
+<link rel="stylesheet" href="themes-site.css">
 </head>
 <body>
 <main>
@@ -43,7 +54,7 @@ code{background:#000;padding:2px 6px;color:var(--green)}
   </div>
 
   <div class="card" id="setup">
-    <p>Choisis ta sauvegarde une seule fois. Elle se trouve dans <code>%APPDATA%\infinitefusion</code> (colle ce chemin dans la barre d'adresse de la fenêtre qui s'ouvre), fichier <code>File X.rxdata</code>.</p>
+    <p>Choisis ta sauvegarde une seule fois. Chrome ne peut pas lire le dossier d'origine du jeu : utilise la copie créée par <code>installer-copie.bat</code>. Tape <code>%USERPROFILE%\SauvegardeIF-copie</code> dans la barre d'adresse de la fenêtre qui s'ouvre, puis choisis ton fichier <code>File X.rxdata</code>.</p>
     <p style="margin-top:8px">Laisse ensuite cet onglet ouvert pendant le live : ton équipe est envoyée à l'overlay à chaque sauvegarde en jeu.</p>
     <div class="row" style="margin-top:14px">
       <button id="pick">Choisir ma sauvegarde</button>
