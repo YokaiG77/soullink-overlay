@@ -81,6 +81,9 @@ button:hover{color:var(--green);border-color:var(--green)}
 .stats{display:flex;gap:22px;font-size:22px;align-items:center}
 .stats b{font-family:"Orbitron",sans-serif;color:var(--green);font-weight:700}
 .stats button{font-size:13px;padding:2px 7px}
+#nCap.over{color:#ff4d4d;animation:capWarn 1s ease-in-out infinite}
+@keyframes capWarn{50%{opacity:.35}}
+#capsRow[hidden]{display:none}
 .route{font-size:20px;color:var(--muted);display:flex;gap:8px;border-bottom:1px solid #1e1e1e;padding-bottom:8px}
 .route input{flex:1;color:var(--text)}
 #list{list-style:none;display:flex;flex-direction:column;gap:6px;overflow:hidden;flex:1}
@@ -109,7 +112,9 @@ button:hover{color:var(--green);border-color:var(--green)}
   <div class="stats">
     <span>Morts <b id="nDead">0</b></span>
     <span>Badges <b id="nBadges">0</b><b style="color:var(--muted)">/8</b> <button data-b="-1">-</button> <button data-b="1">+</button></span>
+    <span title="Level cap">Cap <b id="nCap">-</b> <button id="capEdit">&#9998;</button></span>
   </div>
+  <div class="route" id="capsRow" hidden>Caps <input id="caps" placeholder="12, 22, 26, 35, 38, 45, 51, 54, 58"></div>
   <div class="route">Route <input id="route" placeholder="Route 1"></div>
   <ul id="list"></ul>
 </div>
@@ -253,6 +258,20 @@ function paint(i) {
   c.el.classList.toggle("fused", !!p.f);
 }
 var lastDead = null;
+/* Level cap : un niveau max par nombre de badges (0 badge = 1re valeur). Modifiable avec le crayon, partagé entre les deux overlays. */
+var DEFAULT_CAPS = "12, 22, 26, 35, 38, 45, 51, 54, 58";
+function capList() { return String(data.caps || DEFAULT_CAPS).split(/[,; ]+/).map(Number).filter(function (n) { return n > 0; }); }
+function renderCap(pm, po) {
+  var list = capList(), el = document.getElementById("nCap");
+  if (!list.length) { el.textContent = "-"; el.classList.remove("over"); return; }
+  var cap = list[Math.min(data.badges || 0, list.length - 1)];
+  el.textContent = cap;
+  var top = 0;
+  [pm, po].forEach(function (pt) { if (Array.isArray(pt)) pt.forEach(function (m) { if (m && m.lv > top) top = m.lv; }); });
+  el.classList.toggle("over", top > cap);
+  el.title = top > cap ? "Un Pokémon dépasse le cap (N." + top + ")" : "";
+  setVal(document.getElementById("caps"), data.caps || "");
+}
 function render() {
   var pm = data.party && data.party[ME], po = data.party && data.party[OTHER];
   var sv = document.getElementById("save"); sv.textContent = Array.isArray(pm) ? "ÉQUIPE AUTO" : "ÉQUIPE MANUELLE"; sv.classList.toggle("on", Array.isArray(pm));
@@ -268,6 +287,7 @@ function render() {
   });
   setVal(document.getElementById("route"), data.route || "");
   document.getElementById("nBadges").textContent = data.badges;
+  renderCap(pm, po);
   var fresh = lastDead !== null && data.dead.length > lastDead; lastDead = data.dead.length;
   document.getElementById("nDead").textContent = data.dead.length;
   var ul = document.getElementById("list"); ul.innerHTML = "";
@@ -291,6 +311,8 @@ document.querySelectorAll(".nm").forEach(function (n) {
     document.querySelectorAll(".nm").forEach(function (o) { if (o !== n && o.dataset.who === n.dataset.who) o.value = n.value; });
   };
 });
+document.getElementById("capEdit").onclick = function () { var r = document.getElementById("capsRow"); r.hidden = !r.hidden; if (!r.hidden) document.getElementById("caps").focus(); };
+document.getElementById("caps").oninput = function (e) { change("caps", e.target.value, true); render(); };
 var route = document.getElementById("route");
 route.oninput = function () { change("route", route.value, true); };
 document.querySelectorAll("[data-b]").forEach(function (btn) {
