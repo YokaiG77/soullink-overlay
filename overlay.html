@@ -49,7 +49,7 @@ html[data-motion=low] *,html[data-motion=low] *::before,html[data-motion=low] *:
 input{font:inherit;color:inherit;background:transparent;border:none;outline:none;border-bottom:2px solid transparent;min-width:0}
 input:focus{border-bottom-color:var(--green)}
 input::placeholder{color:var(--dead);-webkit-text-stroke:0}
-.tag input{width:9.5em;font-family:inherit;text-transform:uppercase;-webkit-text-stroke:inherit;color:#0b0b0b}
+.tag input{width:9.5em;min-width:4em;max-width:30em;font-family:inherit;text-transform:uppercase;-webkit-text-stroke:inherit;color:#0b0b0b}
 #sync{font-family:"Orbitron",sans-serif;font-size:11px;letter-spacing:2px;color:var(--dead);-webkit-text-stroke:0;margin-left:10px}
 #sync.on{color:var(--green)}
 #save{font-family:"Orbitron",sans-serif;font-size:11px;letter-spacing:2px;color:var(--dead);-webkit-text-stroke:0;margin-left:10px}
@@ -100,10 +100,10 @@ button:hover{color:var(--green);border-color:var(--green)}
 <body>
 <div class="zone frame" style="left:0;top:0;width:1280px;height:960px"></div>
 <div class="zone frame" style="left:1280px;top:0;width:640px;height:480px">
-  <div class="tag p"><small>Jeu de</small><input class="nm" data-who="other" placeholder="Partenaire"></div>
+  <div class="tag p"><small>Jeu de</small><input spellcheck="false" autocomplete="off" class="nm" data-who="other" placeholder="Partenaire"></div>
 </div>
-<div class="zone frame" style="left:1280px;top:480px;width:320px;height:180px"><div class="tag"><input class="nm" data-who="me" placeholder="Toi"></div></div>
-<div class="zone frame" style="left:1600px;top:480px;width:320px;height:180px"><div class="tag p"><input class="nm" data-who="other" placeholder="Partenaire"></div></div>
+<div class="zone frame" style="left:1280px;top:480px;width:320px;height:180px"><div class="tag"><input spellcheck="false" autocomplete="off" class="nm" data-who="me" placeholder="Toi"></div></div>
+<div class="zone frame" style="left:1600px;top:480px;width:320px;height:180px"><div class="tag p"><input spellcheck="false" autocomplete="off" class="nm" data-who="other" placeholder="Partenaire"></div></div>
 
 <div class="zone dots" id="bar"></div>
 
@@ -114,8 +114,8 @@ button:hover{color:var(--green);border-color:var(--green)}
     <span>Badges <b id="nBadges">0</b><b style="color:var(--muted)">/8</b> <button data-b="-1">-</button> <button data-b="1">+</button></span>
     <span title="Level cap">Cap <b id="nCap">-</b> <button id="capEdit">&#9998;</button></span>
   </div>
-  <div class="route" id="capsRow" hidden>Caps <input id="caps" placeholder="12, 22, 26, 35, 38, 45, 51, 54, 58"></div>
-  <div class="route">Route <input id="route" placeholder="Route 1"></div>
+  <div class="route" id="capsRow" hidden>Caps <input spellcheck="false" id="caps" placeholder="12, 22, 26, 35, 38, 45, 51, 54, 58"></div>
+  <div class="route">Route <input spellcheck="false" id="route" placeholder="Route 1"></div>
   <ul id="list"></ul>
 </div>
 
@@ -237,7 +237,18 @@ for (var k = 0; k < 6; k++) (function (i) {
   cards.push({ el: d, mine: mine, theirs: theirs, hp1: d.querySelector('.h1 i'), hp2: d.querySelector('.h2 i') });
 })(k);
 
-function setVal(input, v) { if (document.activeElement !== input && input.value !== v) input.value = v; }
+function setVal(input, v) { if (document.activeElement !== input && input.value !== v) input.value = v; if (input.classList.contains("nm")) fitName(input); }
+/* Les pseudos prennent la largeur de leur texte (sinon les noms longs sont coupés) */
+var measurer = document.createElement("span");
+measurer.style.cssText = "position:absolute;visibility:hidden;white-space:pre;left:-9999px;top:0";
+document.body.appendChild(measurer);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { document.querySelectorAll(".nm").forEach(fitName); });
+function fitName(input) {
+  var cs = getComputedStyle(input);
+  measurer.style.font = cs.font; measurer.style.letterSpacing = cs.letterSpacing; measurer.style.textTransform = cs.textTransform;
+  measurer.textContent = input.value || input.placeholder || "";
+  input.style.width = Math.ceil(measurer.getBoundingClientRect().width + parseFloat(cs.fontSize) * 0.35) + "px";
+}
 function showSlot(input, hp, party, i, manual) {
   var auto = Array.isArray(party), mon = auto ? party[i] : null;
   input.classList.toggle("auto", auto);
@@ -308,6 +319,7 @@ document.querySelectorAll(".nm").forEach(function (n) {
   n.oninput = function () {
     var key = n.dataset.who === "me" ? (ME === "a" ? "nameA" : "nameB") : (ME === "a" ? "nameB" : "nameA");
     change(key, n.value, true);
+    fitName(n);
     document.querySelectorAll(".nm").forEach(function (o) { if (o !== n && o.dataset.who === n.dataset.who) o.value = n.value; });
   };
 });
